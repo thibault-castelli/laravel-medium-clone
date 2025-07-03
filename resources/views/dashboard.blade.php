@@ -40,8 +40,9 @@
                         <img class="rounded-r-lg w-48 h-full object-cover" src="{{$post->image}}" alt="" />
                     </a>
                 </div>
-
             @endforeach
+
+            {{$posts->onEachSide(1)->links()}}
         </div>
     </div>
 </x-app-layout>
