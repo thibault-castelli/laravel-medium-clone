@@ -41,11 +41,10 @@ class PostController extends Controller
     {
         $data = $request->validated();
 
-        $image = $data['image'];
-        unset($data['image']);
         $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['title']);
-
+        
+        $image = $data['image'];
         $imagePath = $image->store('posts', 'public');
         $data['image'] = $imagePath;
 
