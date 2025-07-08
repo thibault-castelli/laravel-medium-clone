@@ -7,16 +7,12 @@
 
                 <!-- User Avatar and Info -->
                 <div class="flex items-center gap-2 mb-6">
-                    @if ($post->user->image)
-                        <img src="{{ $post->user->imageUrl() }}" alt="{{ $post->user->name }}"
-                            class="rounded-full w-12 h-12 object-cover">
-                    @else
-                        <img src="https://www.startpage.com/av/proxy-image?piurl=https%3A%2F%2Fcdn.pixabay.com%2Fphoto%2F2015%2F03%2F04%2F22%2F35%2Fhead-659652_1280.png&sp=1751979290Tf7832da4b6316b52cb0d30dd93bf6a2f5f968e6d951df23f9ca9a643fae4c10e"
-                            alt="{{ $post->user->name }}" class="rounded-full w-12 h-12 object-cover">
-                    @endif
+                    <x-user-avatar :user="$post->user" />
+
                     <div>
                         <div class="flex gap-2">
-                            <h3>{{ $post->user->name }}</h3>
+                            <a class="hover:underline"
+                                href="{{ route('public.profile.show', $post->user) }}">{{ $post->user->name }}</a>
                             &middot;
                             <a href="#" class="text-emerald-500 hover:underline">
                                 Follow

@@ -1,5 +1,5 @@
 <div class="mt-8 p-4 border-t border-b">
-    <button class="text-gray-500 flex gap-2 hover:text-black transition-colors duration-200">
+    <button class="text-gray-500 flex gap-2 hover:text-black transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="size-6">
             <path stroke-linecap="round" stroke-linejoin="round"
