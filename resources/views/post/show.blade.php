@@ -13,10 +13,22 @@
                         <div class="flex gap-2">
                             <a class="hover:underline"
                                 href="{{ route('public.profile.show', $post->user) }}">{{ $post->user->name }}</a>
-                            &middot;
-                            <a href="#" class="text-emerald-500 hover:underline">
-                                Follow
-                            </a>
+                            @if (auth()->user() && auth()->user()->id !== $post->user->id)
+                                &middot;
+
+                                <div x-data="{
+                                    following: {{ $post->user->isFollowedBy(auth()->user()) ? 'true' : 'false' }},
+                                    follow() {
+                                        this.following = !this.following;
+                                        axios.post('/follow/{{ $post->user->id }}');
+                                    }
+                                }">
+                                    <a href="#" class="hover:underline" x-text="following ? 'Unfollow' : 'Follow'"
+                                        :class="following ? 'text-red-500' : 'text-emerald-500'" @click="follow()">
+
+                                    </a>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="flex gap-2 text-gray-500 text-sm">
