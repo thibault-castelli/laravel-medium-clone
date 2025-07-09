@@ -18,7 +18,7 @@
         @csrf
         @method('patch')
 
-        @if ($user->image)
+        @if ($user->getFirstMedia())
             <div class="mb-4">
                 <img src="{{ $user->imageUrl() }}" alt="{{ $user->name }}'s avatar"
                     class="w-24 h-24 rounded-full object-cover">
@@ -44,14 +44,16 @@
         <!-- Username -->
         <div>
             <x-input-label for="username" :value="__('Username')" />
-            <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)" required autofocus autocomplete="username" />
+            <x-text-input id="username" name="username" type="text" class="mt-1 block w-full" :value="old('username', $user->username)"
+                required autofocus autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('username')" />
         </div>
 
         <!-- Email -->
         <div>
             <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
+            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)"
+                required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !$user->hasVerifiedEmail())
@@ -78,7 +80,7 @@
         <div class="mt-4">
             <x-input-label for="bio" :value="__('Bio')" />
             <x-input-text-area id="bio" class="block mt-1 w-full" name="bio">
-                {{old('bio', $user->bio)}}
+                {{ old('bio', $user->bio) }}
             </x-input-text-area>
             <x-input-error :messages="$errors->get('bio')" class="mt-2" />
         </div>

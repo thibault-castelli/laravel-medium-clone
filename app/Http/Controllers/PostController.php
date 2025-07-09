@@ -43,12 +43,11 @@ class PostController extends Controller
 
         $data['user_id'] = Auth::id();
         $data['slug'] = Str::slug($data['title']);
-        
-        $image = $data['image'];
-        $imagePath = $image->store('posts', 'public');
-        $data['image'] = $imagePath;
 
-        Post::create($data);
+        $post = Post::create($data);
+
+        $post->addMediaFromRequest('image')
+            ->toMediaCollection();
 
         return redirect()->route('dashboard');
     }
