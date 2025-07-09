@@ -39,7 +39,7 @@
                     </div>
                 </div>
 
-                <x-clap-button />
+                <x-clap-button :post="$post" />
 
                 <!-- Content Section -->
                 <div class="mt-8">
@@ -54,7 +54,7 @@
                     <span class="px-4 py-2 bg-gray-100 rounded-xl">{{ $post->category->name }}</span>
                 </div>
 
-                <x-clap-button />
+                <x-clap-button :post="$post" />
             </div>
         </div>
     </div>

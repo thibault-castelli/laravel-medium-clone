@@ -23,10 +23,10 @@
                         following: {{ $user->isFollowedBy(auth()->user()) ? 'true' : 'false' }},
                         followersCount: {{ $user->followers()->count() }},
                         follow() {
-                            this.following = !this.following;
                             axios.post('/follow/{{ $user->id }}')
                                 .then(response => {
                                     this.followersCount = response.data.followersCount;
+                                    this.following = !this.following;
                                 }).catch(error => {
                                     console.error('Error following/unfollowing:', error);
                                 });
