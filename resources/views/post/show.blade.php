@@ -39,7 +39,9 @@
                     </div>
                 </div>
 
-                <x-clap-button :post="$post" />
+                @auth
+                    <x-clap-button :post="$post" />
+                @endauth
 
                 <!-- Content Section -->
                 <div class="mt-8">
@@ -54,7 +56,9 @@
                     <span class="px-4 py-2 bg-gray-100 rounded-xl">{{ $post->category->name }}</span>
                 </div>
 
-                <x-clap-button :post="$post" />
+                @auth
+                    <x-clap-button :post="$post" />
+                @endauth
             </div>
         </div>
     </div>
