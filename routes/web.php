@@ -18,6 +18,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/clap/{post}', [ClapController::class, 'clap'])
         ->name('clap');
+
+    Route::get('/category/{category}', [PostController::class, 'category'])
+        ->name('post.byCategory');
 });
 
 Route::middleware('auth')->group(function () {
