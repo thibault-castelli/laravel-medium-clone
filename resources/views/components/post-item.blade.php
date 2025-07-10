@@ -7,7 +7,12 @@
             {{ Str::words($post->content, 20) }}
         </div>
         <div class="text-gray-500 text-sm mb-2 flex items-center gap-4">
-            {{ $post->formattedCreatedAt() }}
+            <span>
+                Published by
+                <a class="hover:underline text-gray-800"
+                    href="{{ route('public.profile.show', $post->user->username) }}">{{ $post->user->name }}</a>
+                at {{ $post->formattedCreatedAt() }}
+            </span>
             <div class="flex items-center gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                     stroke="currentColor" class="size-5">
@@ -17,16 +22,6 @@
                 {{ $post->claps_count }}
             </div>
         </div>
-        <a href="{{ route('post.show', ['username' => $post->user->username, 'post' => $post]) }}">
-            <x-primary-button>
-                Read more
-                <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    fill="none" viewBox="0 0 14 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M1 5h12m0 0L9 1m4 4L9 9" />
-                </svg>
-            </x-primary-button>
-        </a>
     </div>
     <a href="{{ route('post.show', ['username' => $post->user->username, 'post' => $post]) }}">
         <img class="rounded-r-lg w-48 h-full object-cover" src="{{ $post->imageUrl('preview') }}" alt="" />
