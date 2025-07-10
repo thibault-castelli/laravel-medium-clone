@@ -1,6 +1,6 @@
 @props(['user', 'size' => 'w-12 h-12'])
 
-@if ($user->getFirstMedia())
+@if ($user->imageUrl())
     <a href="{{ route('public.profile.show', $user) }}"><img src="{{ $user->imageUrl() }}" alt="{{ $user->name }}"
             class="rounded-full object-cover {{ $size }}"></a>
 @else

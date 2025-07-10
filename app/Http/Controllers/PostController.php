@@ -16,7 +16,15 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = $this->getPostsByFollowingQuery()->simplePaginate(5);
+        $user = auth()->user();
+        $query = Post::with(['user', 'media'])->withCount('claps')->latest();
+
+        if ($user) {
+            $ids = $user->following()->pluck('users.id');
+            $query->whereIn('user_id', $ids);
+        }
+
+        $posts = $query->simplePaginate(5);
 
         return view('post.index', [
             'posts' => $posts,
@@ -91,22 +99,10 @@ class PostController extends Controller
      */
     public function category(Category $category)
     {
-        $posts = $this->getPostsByFollowingQuery()->simplePaginate(5);
+        $posts = $category->posts()->with(['user', 'media'])->withCount('claps')->latest()->simplePaginate(5);
 
         return view('post.index', [
             'posts' => $posts
         ]);
-    }
-
-    private function getPostsByFollowingQuery() {
-        $user = auth()->user();
-        $query = Post::latest();
-
-        if ($user) {
-            $ids = $user->following()->pluck('users.id');
-            $query->whereIn('user_id', $ids);
-        }
-
-        return $query;
     }
 }
