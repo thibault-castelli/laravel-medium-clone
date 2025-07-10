@@ -39,6 +39,21 @@
                     </div>
                 </div>
 
+                @if ($post->user_id === auth()->id())
+                    <div class="pt-8 mt-4 border-t border-gray-200">
+                        <x-primary-button :href="route('post.edit', $post->slug)">
+                            Edit Post
+                        </x-primary-button>
+                        <form action="{{ route('post.destroy', $post) }}" method="POST" class="inline-block">
+                            @csrf
+                            @method('DELETE')
+                            <x-danger-button>
+                                Delete Post
+                            </x-danger-button>
+                        </form>
+                    </div>
+                @endif
+
                 @auth
                     <x-clap-button :post="$post" />
                 @endauth

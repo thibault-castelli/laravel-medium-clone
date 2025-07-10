@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostCreateRequest;
+use App\Http\Requests\PostUpdateRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -75,15 +76,37 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        if ($post->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $categories = Category::get();
+        return view('post.edit', [
+            'post' => $post,
+            'categories' => $categories,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(PostUpdateRequest $request, Post $post)
     {
-        //
+        if ($post->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $data = $request->validated();
+        $post->update($data);
+
+        if ($request->hasFile('image')) {
+            $post->media()->each(function ($media) {
+                $media->delete();
+            });
+            $post->addMediaFromRequest('image')->toMediaCollection();
+        }
+
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -91,7 +114,16 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        if ($post->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $post->media()->each(function ($media) {
+            $media->delete();
+        });
+        $post->delete();
+
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -100,6 +132,16 @@ class PostController extends Controller
     public function category(Category $category)
     {
         $posts = $category->posts()->with(['user', 'media'])->withCount('claps')->latest()->simplePaginate(5);
+
+        return view('post.index', [
+            'posts' => $posts
+        ]);
+    }
+
+    public function myPosts()
+    {
+        $user = auth()->user();
+        $posts = $user->posts()->with(['user', 'media'])->withCount('claps')->latest()->simplePaginate(5);
 
         return view('post.index', [
             'posts' => $posts
