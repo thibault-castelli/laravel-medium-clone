@@ -2,16 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-class User extends Authenticatable implements MustVerifyEmail, HasMedia
+class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, InteractsWithMedia;
@@ -55,16 +53,14 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     public function registerMediaConversions(?Media $media = null): void
     {
-        $this
-            ->addMediaConversion('avatar')
+        $this->addMediaConversion('avatar')
             ->width(128)
             ->crop(128, 128);
     }
 
     public function registerMediaCollections(): void
     {
-        $this
-            ->addMediaCollection('avatar')
+        $this->addMediaCollection('avatar')
             ->singleFile();
     }
 
@@ -85,21 +81,26 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
 
     public function isFollowedBy(User $user): bool
     {
-        return $this->followers()->where('follower_id', $user->id)->exists();
+        return $this->followers()
+            ->where('follower_id', $user->id)
+            ->exists();
     }
 
     public function hasClapped(Post $post): bool
     {
-        return $post->claps()->where('user_id', $this->id)->exists();
+        return $post->claps()
+            ->where('user_id', $this->id)
+            ->exists();
     }
 
-    public function imageUrl() {
+    public function imageUrl()
+    {
         $media = $this->getFirstMedia('avatar');
 
         if ($media?->hasGeneratedConversion('avatar')) {
             return $media->getUrl('avatar');
         }
-        
+
         return $media?->getUrl();
     }
 }

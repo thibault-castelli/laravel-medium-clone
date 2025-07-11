@@ -7,9 +7,13 @@ use App\Models\User;
 
 class PublicProfileController extends Controller
 {
+    const POSTS_PER_PAGE = 5;
+
     public function show(User $user)
     {
-        $posts = $user->posts()->latest()->simplePaginate(5);
+        $posts = $user->posts()
+            ->latest()
+            ->simplePaginate(self::POSTS_PER_PAGE);
 
         return view('public-profile.show', [
             'user' => $user,

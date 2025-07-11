@@ -8,7 +8,8 @@ class FollowerController extends Controller
 {
     public function followUnfollow(User $user)
     {
-        $user->followers()->toggle(auth()->user()->id);
+        $user->followers()
+            ->toggle(auth()->user()->id);
 
         return response()->json([
             'followersCount' => $user->followers()->count(),
