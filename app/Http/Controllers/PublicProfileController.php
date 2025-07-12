@@ -12,6 +12,8 @@ class PublicProfileController extends Controller
     public function show(User $user)
     {
         $posts = $user->posts()
+            ->with(['user', 'media'])
+            ->withCount('claps')
             ->latest()
             ->simplePaginate(self::POSTS_PER_PAGE);
 

@@ -12,13 +12,13 @@
             </div>
 
             <div class="flex">
-                <a href="{{ route('post.create') }}" class="flex items-center">
-                    <x-primary-button>
-                        Create Post
-                    </x-primary-button>
-                </a>
-
                 @auth
+                    <a href="{{ route('post.create') }}" class="hidden sm:flex items-center">
+                        <x-primary-button>
+                            Create Post
+                        </x-primary-button>
+                    </a>
+
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:flex sm:items-center sm:ms-6">
                         <x-dropdown align="right" width="48">
@@ -99,6 +99,12 @@
                 </div>
 
                 <div class="mt-3 space-y-1">
+                    <x-responsive-nav-link href="{{ route('post.create') }}">
+                        Create Post
+                    </x-responsive-nav-link>
+                </div>
+
+                <div class="space-y-1">
                     <x-responsive-nav-link :href="route('public.profile.show', auth()->user()->username)">
                         {{ __('Profile') }}
                     </x-responsive-nav-link>
@@ -124,7 +130,6 @@
                     <x-responsive-nav-link :href="route('register')">
                         Create an account
                     </x-responsive-nav-link>
-
                 </div>
             @endguest
         </div>
