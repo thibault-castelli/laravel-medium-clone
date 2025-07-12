@@ -17,7 +17,7 @@
                 </div>
             @endforelse
 
-            {{$posts->links()}}
+            {{ $posts->links() }}
         </div>
     </div>
 </x-app-layout>
