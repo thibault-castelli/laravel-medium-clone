@@ -4,7 +4,7 @@
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="flex">
 
-                    <div class="flex-1 pr-8">
+                    <div class="flex-1 pr-8 border-r">
                         <h1 class="text-5xl">{{ $user->name }}</h1>
 
                         <div class="mt-8">
@@ -19,62 +19,90 @@
                         {{ $posts->links() }}
                     </div>
 
-                    @auth
-                        <div x-data="{
-                            following: {{ $user->isFollowedBy(auth()->user()) ? 'true' : 'false' }},
-                            followersCount: {{ $user->followers()->count() }},
-                            follow() {
-                                axios.post('/follow/{{ $user->id }}')
-                                    .then(response => {
-                                        this.followersCount = response.data.followersCount;
-                                        this.following = !this.following;
-                                    }).catch(error => {
-                                        console.error('Error following/unfollowing:', error);
-                                    });
-                            }
-                        }" class="w-[320px] border-l px-8">
+                    <div class="flex flex-col items-center w-[320px]">
+                        @auth
+                            <div x-data="{
+                                following: {{ $user->isFollowedBy(auth()->user()) ? 'true' : 'false' }},
+                                followersCount: {{ $user->followers()->count() }},
+                                follow() {
+                                    axios.post('/follow/{{ $user->id }}')
+                                        .then(response => {
+                                            this.followersCount = response.data.followersCount;
+                                            this.following = !this.following;
+                                        }).catch(error => {
+                                            console.error('Error following/unfollowing:', error);
+                                        });
+                                }
+                            }" class="w-[320px] px-8">
 
-                            <x-user-avatar :user="$user" size="w-24 h-24" />
+                                <x-user-avatar :user="$user" size="w-24 h-24" />
 
-                            <h3>{{ $user->name }}</h3>
+                                <h3 class="text-xl mb-3">{{ $user->name }}</h3>
 
-                            <p class="text-gray-500"><span x-text="followersCount"></span>
-                                <span x-text="followersCount <= 1 ? 'follower' : 'followers'"></span>
-                            </p>
+                                @if (auth()->user()->id === $user->id)
+                                    <x-primary-button :href="route('profile.edit')" class="mb-4">
+                                        Edit Profile
+                                    </x-primary-button>
+                                @endif
 
-                            <p>
-                                {{ $user->bio ?? 'This user has not set a bio yet.' }}
-                            </p>
+                                <p>
+                                    <strong>Bio: </strong>{{ $user->bio ?? 'This user has not set a bio yet.' }}
+                                </p>
 
-                            @if (auth()->user() && auth()->user()->id !== $user->id)
-                                <div>
-                                    <button @click="follow()"
-                                        class="rounded-full px-4 py-2 mt-4 text-white transition-colors"
-                                        x-text="following ? 'Unfollow' : 'Follow'"
-                                        :class="following ? 'bg-red-500 hover:bg-red-600' :
-                                            'bg-emerald-500 hover:bg-emerald-600'">
-                                    </button>
-                                </div>
-                            @endif
+                                @if (auth()->user() && auth()->user()->id !== $user->id)
+                                    <div>
+                                        <button @click="follow()"
+                                            class="rounded-full px-4 py-2 mt-4 text-white transition-colors"
+                                            x-text="following ? 'Unfollow' : 'Follow'"
+                                            :class="following ? 'bg-red-500 hover:bg-red-600' :
+                                                'bg-emerald-500 hover:bg-emerald-600'">
+                                        </button>
+                                    </div>
+                                @endif
 
+                            </div>
+                        @endauth
+
+                        @guest
+                            <div class="w-[320px] px-8">
+                                <x-user-avatar :user="$user" size="w-24 h-24" />
+
+                                <h3 class="text-xl mb-3">{{ $user->name }}</h3>
+
+                                <p>
+                                    <strong>Bio: </strong>{{ $user->bio ?? 'This user has not set a bio yet.' }}
+                                </p>
+                            </div>
+                        @endguest
+
+                        <div class="w-[320px] px-8 mt-6">
+                            <strong>Followers:</strong>
+                            <ul class="list-disc pl-5">
+                                @forelse ($user->followers as $follower)
+                                    <li>
+                                        <a class="hover:underline"
+                                            href="{{ route('public.profile.show', $follower->username) }}">{{ $follower->name }}</a>
+                                    </li>
+                                @empty
+                                    <li class="text-gray-500 list-none">No followers yet.</li>
+                                @endforelse
+                            </ul>
                         </div>
-                    @endauth
 
-                    @guest
-                        <div class="w-[320px] border-l px-8">
-                            <x-user-avatar :user="$user" size="w-24 h-24" />
-
-                            <h3>{{ $user->name }}</h3>
-
-                            <p class="text-gray-500"><span x-text="followersCount"></span>
-                                <span x-text="followersCount <= 1 ? 'follower' : 'followers'"></span>
-                            </p>
-
-                            <p>
-                                {{ $user->bio ?? 'This user has not set a bio yet.' }}
-                            </p>
+                        <div class="w-[320px] px-8 mt-6">
+                            <strong>Following:</strong>
+                            <ul class="list-disc pl-5">
+                                @forelse ($user->following as $following)
+                                    <li>
+                                        <a class="hover:underline"
+                                            href="{{ route('public.profile.show', $following->username) }}">{{ $following->name }}</a>
+                                    </li>
+                                @empty
+                                    <li class="text-gray-500 list-none">No following yet.</li>
+                                @endforelse
+                            </ul>
                         </div>
-                    @endguest
+                    </div>
                 </div>
             </div>
         </div>
