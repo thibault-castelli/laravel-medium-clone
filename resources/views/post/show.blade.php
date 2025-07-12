@@ -60,10 +60,12 @@
 
                 <!-- Content Section -->
                 <div class="mt-8">
-                    <img src="{{ $post->imageUrl() }}" alt="{{ $post->title }}" class="w-full">
+
                     <div>
                         {{ $post->content }}
                     </div>
+                    <img src="{{ $post->imageUrl() ?? 'https://picsum.photos/800' }}" alt="{{ $post->title }}"
+                        class="max-h-80 object-cover mt-4 mx-auto rounded-md">
                 </div>
 
                 <!-- Category Section -->
