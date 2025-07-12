@@ -22,6 +22,16 @@ class DatabaseSeeder extends Seeder
 
         User::factory(9)->create();
 
+        $users = User::all();
+
+        foreach ($users as $user) {
+            // Each user follows 1 to 3 random other users (excluding themselves)
+            $toFollow = $users->where('id', '!=', $user->id)->random(rand(1, 3));
+            foreach ($toFollow as $followed) {
+                $user->followers()->attach($followed->id);
+            }
+        }
+
         $categories = [
             'Technology',
             'Health',
