@@ -47,6 +47,14 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        Post::factory(100)->create();
+        $posts = Post::factory(80)->create();
+
+        foreach ($posts as $post) {
+            // Each post gets claps from 1 to 7 random users
+            $clappers = $users->random(rand(1, 7));
+            foreach ($clappers as $user) {
+                $post->claps()->create(['user_id' => $user->id]);
+            }
+        }
     }
 }
