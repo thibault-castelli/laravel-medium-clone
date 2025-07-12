@@ -1,10 +1,10 @@
-<div class="bg-white border border-gray-200 rounded-lg shadow-sm flex mb-8">
-    <div class="p-5 flex-1">
+<div class="bg-white border border-gray-200 rounded-lg shadow-sm flex mb-8 h-60">
+    <div class="p-5 flex-1 flex flex-col justify-between">
         <a href="{{ route('post.show', ['username' => $post->user->username, 'post' => $post]) }}">
-            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">{{ $post->title }}</h5>
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 hover:underline">{{ $post->title }}</h5>
         </a>
         <div class="mb-3 font-normal text-gray-700 ">
-            {{ Str::words($post->content, 20) }}
+            {{ Str::words($post->content, 25) }}
         </div>
         <div class="text-gray-500 text-sm mb-2 flex items-center gap-4">
             <span>
@@ -24,6 +24,7 @@
         </div>
     </div>
     <a href="{{ route('post.show', ['username' => $post->user->username, 'post' => $post]) }}">
-        <img class="rounded-r-lg w-48 h-full object-cover" src="{{ $post->imageUrl('preview') }}" alt="" />
+        <img class="rounded-r-lg w-48 h-full object-cover"
+            src="{{ $post->imageUrl('preview') ?? 'https://picsum.photos/400' }}" alt="{{ $post->title }}" />
     </a>
 </div>
